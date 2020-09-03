@@ -10,14 +10,24 @@ import Foundation
 
 class Concentration {
     
-    var Cards: Array<Card>
+    var cards = [Card]()
     
-    func chooseCard(at Index: Int) {
-        
+    func chooseCard(at index: Int) {
+        print(cards[index].identifier)
+        if cards[index].isFaceUp {
+            cards[index].isFaceUp = false
+        } else {
+            cards[index].isFaceUp = true
+        }
     }
     
     init(numberOfPairsOfCards: Int) {
-        let card = Card()
+        for _ in 0..<numberOfPairsOfCards {
+            let card = Card()
+            cards += [card, card]
+        }
+        
+        // TODO: Implement card shuffling
     }
     
 }

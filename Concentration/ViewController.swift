@@ -10,35 +10,41 @@ import UIKit
 
 class ViewController: UIViewController {
     
-    var game: Concentration
-    
     @IBOutlet weak var flipLabel: UILabel!
     @IBOutlet var cardButtons: [UIButton]!
-    
+    lazy var game = Concentration(numberOfPairsOfCards: (cardButtons.count+1)/2)
+    let emojiTheme = ["🚗", "🚕", "🚙", "🚒"]
+
     var flipCount = 0 {
         didSet {
             flipLabel.text = "Flips:   \(flipCount)"
         }
     }
-    
-    let emojiTheme = ["🚗", "🚕", "🚙", "🚒"]
 
     @IBAction func touchCard(_ sender: UIButton) {
-        let cardNumber = cardButtons.firstIndex(of: sender)!
-        flipCard(withEmoji: emojiTheme[cardNumber], on: sender)
-    }
-    
-    func flipCard(withEmoji emoji: String, on button: UIButton) {
-        if button.currentTitle == emoji {
-            button.setTitle("", for: UIControl.State.normal)
-            button.backgroundColor = #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1)
-        } else {
-            button.setTitle(emoji, for: UIControl.State.normal)
-            button.backgroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
-        }
-        
         flipCount += 1
+        if let cardNumber = cardButtons.firstIndex(of: sender) {
+            game.chooseCard(at: cardNumber)
+            updateViewFromModel()
+        }
     }
     
+    func updateViewFromModel() {
+        for index in cardButtons.indices {
+            let button = cardButtons[index]
+            let card = game.cards[index]
+            if card.isFaceUp {
+                button.setTitle(emoji(for: card), for: UIControl.State.normal)
+                button.backgroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+            } else {
+                button.setTitle("", for: UIControl.State.normal)
+                button.backgroundColor = card.isMatched ? #colorLiteral(red: 1, green: 1, blue: 1, alpha: 0) : #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1)
+            }
+        }
+    }
+    
+    func emoji(for card: Card) -> String {
+        return emojiTheme[(card.identifier - 1)]
+    }
 }
 
