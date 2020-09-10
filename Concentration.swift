@@ -51,5 +51,7 @@ class Concentration {
         
         currentEmojiTheme = Int.random(in: 1...numberOfEmojiThemes)
         cards.shuffle()
+        
+        print("Game instance reset!")
     }
 }
