@@ -13,6 +13,7 @@ class Concentration {
     var cards = [Card]()
     var flipCount = 0
     var currentEmojiTheme = 0
+    var score = 0
     
     func chooseCard(at index: Int) {
         flipCount += 1
@@ -38,4 +39,17 @@ class Concentration {
         cards.shuffle()
     }
     
+    func resetGame(numberOfPairsOfCards: Int, numberOfEmojiThemes: Int) {
+        // Reset all necessary variables for new game
+        flipCount = 0
+        score = 0
+        
+        for index in cards.indices {
+            cards[index].isFaceUp = false
+            cards[index].isMatched = false
+        }
+        
+        currentEmojiTheme = Int.random(in: 1...numberOfEmojiThemes)
+        cards.shuffle()
+    }
 }
