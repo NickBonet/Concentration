@@ -11,9 +11,13 @@ import Foundation
 class Concentration {
     
     var cards = [Card]()
+    var flipCount = 0
+    var currentEmojiTheme = 0
     
     func chooseCard(at index: Int) {
-        print(cards[index].identifier)
+        flipCount += 1
+        print("Card number \(cards[index].identifier) clicked")
+        
         if cards[index].isFaceUp {
             cards[index].isFaceUp = false
         } else {
@@ -21,13 +25,17 @@ class Concentration {
         }
     }
     
-    init(numberOfPairsOfCards: Int) {
+    init(numberOfPairsOfCards: Int, numberOfEmojiThemes: Int) {
         for _ in 0..<numberOfPairsOfCards {
             let card = Card()
             cards += [card, card]
         }
         
-        // TODO: Implement card shuffling
+        // Choose a random emoji theme to use for the instance of the game.
+        currentEmojiTheme = Int.random(in: 1...numberOfEmojiThemes)
+        
+        // Shuffle the cards in the card array.
+        cards.shuffle()
     }
     
 }

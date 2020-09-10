@@ -10,19 +10,27 @@ import UIKit
 
 class ViewController: UIViewController {
     
+    // Text label for the flip count.
     @IBOutlet weak var flipLabel: UILabel!
+    
+    // Outlet for all of the card buttons in the UI.
     @IBOutlet var cardButtons: [UIButton]!
-    lazy var game = Concentration(numberOfPairsOfCards: (cardButtons.count+1)/2)
-    let emojiTheme = ["🚗", "🚕", "🚙", "🚒"]
-
-    var flipCount = 0 {
-        didSet {
-            flipLabel.text = "Flips:   \(flipCount)"
-        }
-    }
+    
+    // Nice little dictionary for different emoji themes for the cards.
+    var emojiThemes = [
+        1: ["🚗", "🚕", "🚙", "🚒", "🚖", "🚘", "🚚", "🚛"],
+        2: ["🍫", "🍬", "🍭", "🍪", "🍩", "🍰", "🧁", "🥮"],
+        3: ["🐶", "🐱", "🐭", "🐹", "🐰", "🦊", "🐻", "🐼"],
+        4: ["🍏", "🍎", "🍐", "🍊", "🍋", "🍌", "🍉", "🍇"],
+        5: ["⚽️", "🏀", "🏈", "⚾️", "🥎", "🎾", "🏐", "🏉"],
+        6: ["❤️", "🧡", "💛", "💚", "💙", "💜", "🖤", "🤍"],
+    ]
+    
+    // Instance of the actual game logic class.
+    lazy var game = Concentration(numberOfPairsOfCards: (cardButtons.count+1)/2,
+                                  numberOfEmojiThemes: emojiThemes.count)
 
     @IBAction func touchCard(_ sender: UIButton) {
-        flipCount += 1
         if let cardNumber = cardButtons.firstIndex(of: sender) {
             game.chooseCard(at: cardNumber)
             updateViewFromModel()
@@ -41,10 +49,12 @@ class ViewController: UIViewController {
                 button.backgroundColor = card.isMatched ? #colorLiteral(red: 1, green: 1, blue: 1, alpha: 0) : #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1)
             }
         }
+        flipLabel.text = "Flips: \(game.flipCount)"
     }
     
     func emoji(for card: Card) -> String {
-        return emojiTheme[(card.identifier - 1)]
+        let currentTheme = emojiThemes[game.currentEmojiTheme]
+        return currentTheme?[card.identifier - 1] ?? "?"
     }
 }
 
