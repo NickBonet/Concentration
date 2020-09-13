@@ -10,10 +10,10 @@ import Foundation
 
 struct Card {
     
-    var identifier: Int
-    var isFaceUp = false
-    var isMatched = false
-    var wasSeen = false
+    public var identifier: Int
+    public var isFaceUp = false
+    public var isMatched = false
+    public var wasSeen = false
     
     private static var identifierFactory = 0;
     
@@ -22,7 +22,7 @@ struct Card {
         return identifierFactory
     }
     
-    init() {
+    public init() {
         self.identifier = Card.getUniqueIdentifier()
     }
     
