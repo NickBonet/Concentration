@@ -14,7 +14,27 @@ class Concentration {
     public var flipCount = 0
     public var currentEmojiTheme = 0
     public var score = 0
-    private var indexOfOneAndOnlyFaceUpCard : Int?
+    private var indexOfOneAndOnlyFaceUpCard : Int? {
+        get {
+            var foundIndex: Int?
+            for index in cards.indices {
+                if cards[index].isFaceUp {
+                    if foundIndex == nil {
+                        foundIndex = index
+                    } else {
+                        foundIndex = nil
+                    }
+                }
+            }
+            return foundIndex
+        }
+        
+        set(newValue) {
+            for index in cards.indices {
+                cards[index].isFaceUp = (index == newValue)
+            }
+        }
+    }
     
     public func chooseCard(at index: Int) {
         if !cards[index].isMatched {
@@ -26,10 +46,10 @@ class Concentration {
                     cards[index].isMatched = true
                     changeScore(value: 2)
                 } else { // If the cards do not match, check if they were seen and change score accordingly.
-                    if cards[index].wasSeen && indexOfOneAndOnlyFaceUpCard != nil {
+                    if cards[index].wasSeen {
                         changeScore(value: -1)
                     }
-                    if cards[matchIndex].wasSeen && indexOfOneAndOnlyFaceUpCard != nil {
+                    if cards[matchIndex].wasSeen {
                         changeScore(value: -1)
                     }
                 }
@@ -37,16 +57,13 @@ class Concentration {
                 // If the cards don't match, mark them as seen.
                 cards[index].wasSeen = true
                 cards[matchIndex].wasSeen = true
-                
                 cards[index].isFaceUp = true
-                indexOfOneAndOnlyFaceUpCard = nil
             } else {
                 // Either 0 or 2 cards are face up, can flip them all down.
                 for index in cards.indices {
                     cards[index].isFaceUp = false
                 }
                 
-                cards[index].isFaceUp = true
                 indexOfOneAndOnlyFaceUpCard = index
             }
         }
@@ -69,17 +86,15 @@ class Concentration {
         // Reset all necessary variables for new game
         flipCount = 0
         score = 0
-        indexOfOneAndOnlyFaceUpCard = nil
         
         for index in cards.indices {
             cards[index].isFaceUp = false
             cards[index].isMatched = false
             cards[index].wasSeen = false
         }
-        cards.shuffle()
         
+        cards.shuffle()
         currentEmojiTheme = Int.random(in: 1...numberOfEmojiThemes)
-
     }
     
     private func changeScore(value: Int) {
