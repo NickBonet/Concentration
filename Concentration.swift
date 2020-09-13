@@ -44,7 +44,7 @@ class Concentration {
                 if cards[matchIndex].identifier == cards[index].identifier {
                     cards[matchIndex].isMatched = true
                     cards[index].isMatched = true
-                    changeScore(value: 2)
+                    changeScore(value: 2) // Add score of 2 on match.
                 } else { // If the cards do not match, check if they were seen and change score accordingly.
                     if cards[index].wasSeen {
                         changeScore(value: -1)
@@ -83,20 +83,23 @@ class Concentration {
     }
     
     public func resetGame(numberOfPairsOfCards: Int, numberOfEmojiThemes: Int) {
-        // Reset all necessary variables for new game
+        // Reset all necessary variables for new game.
         flipCount = 0
         score = 0
         
+        // Reset the state of all the cards.
         for index in cards.indices {
             cards[index].isFaceUp = false
             cards[index].isMatched = false
             cards[index].wasSeen = false
         }
         
+        // Reshuffle, and choose a new emoji theme.
         cards.shuffle()
         currentEmojiTheme = Int.random(in: 1...numberOfEmojiThemes)
     }
-    
+
+    // Simple method to modify game score, without dipping into negative values.
     private func changeScore(value: Int) {
         if (value > 0) {
             score += value

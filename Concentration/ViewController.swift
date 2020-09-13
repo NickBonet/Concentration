@@ -15,7 +15,11 @@ class ViewController: UIViewController {
     @IBOutlet private weak var scoreLabel: UILabel!
     
     
-    // Nice little dictionary for different emoji themes for the cards.
+    /*
+        Nice little dictionary for different emoji themes for the cards.
+        Can simply add a new entry of 8 emojis and it will be randomly
+        selected by the game.
+    */
     private var emojiThemes = [
         1: ["🚗", "🚕", "🚙", "🚒", "🚖", "🚘", "🚚", "🚛"],
         2: ["🍫", "🍬", "🍭", "🍪", "🍩", "🍰", "🧁", "🥮"],
@@ -59,6 +63,11 @@ class ViewController: UIViewController {
     }
     
     private func emoji(for card: Card) -> String {
+        /*
+            Returns an emoji based on the selected theme in game's currentEmojiTheme
+            Since the cards are shuffled AND a random theme is chosen in the game's init()
+            method, I don't bother to select emojis randomly here.
+        */
         return emojiThemes[game.currentEmojiTheme]?[card.identifier - 1] ?? "?"
     }
 }
