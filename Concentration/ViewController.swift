@@ -10,10 +10,19 @@ import UIKit
 
 class ViewController: UIViewController {
 
-    @IBOutlet private weak var flipLabel: UILabel!
-    @IBOutlet private var cardButtons: [UIButton]!
-    @IBOutlet private weak var scoreLabel: UILabel!
+    @IBOutlet private weak var flipLabel: UILabel! {
+        didSet {
+            updateFlipCountLabel()
+        }
+    }
     
+    @IBOutlet private weak var scoreLabel: UILabel! {
+        didSet {
+            updateScoreLabel()
+        }
+    }
+    
+    @IBOutlet private var cardButtons: [UIButton]!
     
     /*
         Nice little dictionary for different emoji themes for the cards.
@@ -58,8 +67,29 @@ class ViewController: UIViewController {
                 button.backgroundColor = card.isMatched ? #colorLiteral(red: 1, green: 1, blue: 1, alpha: 0) : #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1)
             }
         }
-        flipLabel.text = "Flips: \(game.flipCount)"
-        scoreLabel.text = "Score: \(game.score)"
+        
+        updateScoreLabel()
+        updateFlipCountLabel()
+    }
+    
+    private func updateFlipCountLabel() {
+        let attributes: [NSAttributedString.Key: Any] = [
+            .strokeColor: UIColor.orange,
+            .strokeWidth: 5.0
+        ]
+        
+        let flipAttributedText = NSAttributedString(string: "Flips: \(game.flipCount)", attributes: attributes)
+        flipLabel.attributedText = flipAttributedText
+    }
+    
+    private func updateScoreLabel() {
+        let attributes: [NSAttributedString.Key: Any] = [
+            .strokeColor: UIColor.orange,
+            .strokeWidth: 5.0
+        ]
+        
+        let scoreAttributedText = NSAttributedString(string: "Score: \(game.score)", attributes: attributes)
+        scoreLabel.attributedText = scoreAttributedText
     }
     
     private func emoji(for card: Card) -> String {
@@ -71,4 +101,3 @@ class ViewController: UIViewController {
         return emojiThemes[game.currentEmojiTheme]?[card.identifier - 1] ?? "?"
     }
 }
-

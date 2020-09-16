@@ -37,7 +37,8 @@ class Concentration {
     }
     
     public func chooseCard(at index: Int) {
-        if !cards[index].isMatched {
+        assert(cards.indices.contains(index), "Concentration.chooseCard(at: \(index)): chosen index not valid.")
+        if !cards[index].isMatched && !cards[index].isFaceUp {
             flipCount += 1
             if let matchIndex = indexOfOneAndOnlyFaceUpCard, matchIndex != index {
                 // Check if the cards match
@@ -70,6 +71,7 @@ class Concentration {
     }
     
     public init(numberOfPairsOfCards: Int, numberOfEmojiThemes: Int) {
+        assert(numberOfPairsOfCards > 0, "Concentration.init(\(numberOfPairsOfCards)): Must have at least one pair of cards.")
         for _ in 0..<numberOfPairsOfCards {
             let card = Card()
             cards += [card, card]
