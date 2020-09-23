@@ -16,17 +16,7 @@ class Concentration {
     public var score = 0
     private var indexOfOneAndOnlyFaceUpCard : Int? {
         get {
-            var foundIndex: Int?
-            for index in cards.indices {
-                if cards[index].isFaceUp {
-                    if foundIndex == nil {
-                        foundIndex = index
-                    } else {
-                        foundIndex = nil
-                    }
-                }
-            }
-            return foundIndex
+            return cards.indices.filter({ cards[$0].isFaceUp }).oneAndOnly
         }
         
         set(newValue) {
@@ -108,5 +98,12 @@ class Concentration {
         } else {
             if score > 0 { score += value }
         }
+    }
+}
+
+
+extension Collection {
+    var oneAndOnly: Element? {
+        return (count == 1) ? self.first : nil
     }
 }
