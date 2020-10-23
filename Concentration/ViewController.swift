@@ -75,23 +75,11 @@ class ViewController: UIViewController {
     }
     
     private func updateFlipCountLabel() {
-        let attributes: [NSAttributedString.Key: Any] = [
-            .strokeColor: UIColor.orange,
-            .strokeWidth: 5.0
-        ]
-        
-        let flipAttributedText = NSAttributedString(string: "Flips: \(game.flipCount)", attributes: attributes)
-        flipLabel.attributedText = flipAttributedText
+        flipLabel.text = "Flips: \(game.flipCount)"
     }
     
     private func updateScoreLabel() {
-        let attributes: [NSAttributedString.Key: Any] = [
-            .strokeColor: UIColor.orange,
-            .strokeWidth: 5.0
-        ]
-        
-        let scoreAttributedText = NSAttributedString(string: "Score: \(game.score)", attributes: attributes)
-        scoreLabel.attributedText = scoreAttributedText
+        scoreLabel.text = "Score: \(game.score)"
     }
     
     private func emoji(for card: Card) -> String {

@@ -10,7 +10,7 @@ import Foundation
 
 class Concentration {
     private var numberOfCardsToMatch: Int
-    private var cards: CardDeck
+    private var cards: CardDeck = CardDeck(numberOfCardsToMatch: 2)
     private var cardsSelectedCount: Int {
         get {
             var count = 0
@@ -30,7 +30,6 @@ class Concentration {
     public init(numberOfCardsToMatch: Int, numberOfEmojiThemes: Int) {
         assert(numberOfCardsToMatch == 2 || numberOfCardsToMatch == 3, "Concentration.init(\(numberOfCardsToMatch)): Must have at least one pair of cards.")
         self.numberOfCardsToMatch = numberOfCardsToMatch
-        cards = CardDeck(numberOfCardsToMatch: numberOfCardsToMatch)
         resetGame(numberOfCardsToMatch: numberOfCardsToMatch, numberOfEmojiThemes: numberOfEmojiThemes)
     }
     
@@ -62,8 +61,9 @@ class Concentration {
             else {
                 for card in selectedCards {
                     let index = cardsDealt.firstIndex(of: card)!
-                    cardsDealt[index].isSelected = false
                     if card.wasSeen { score -= 1 }
+                    cardsDealt[index].isSelected = false
+                    cardsDealt[index].wasSeen = true
                 }
             }
             setCardSelected(index)
@@ -94,7 +94,6 @@ class Concentration {
     // Sets properties for when a card is selected.
     private func setCardSelected(_ index: Int) {
         if cardsDealt.indices.contains(index) {
-            cardsDealt[index].wasSeen = true
             cardsDealt[index].isSelected = true
             flipCount += 1
         }

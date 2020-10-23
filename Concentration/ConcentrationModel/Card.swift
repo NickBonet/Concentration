@@ -16,4 +16,8 @@ struct Card : Equatable {
     public init(_ identifier: Int) {
         self.identifier = identifier
     }
+    
+    static func ==(lhs: Card, rhs: Card) -> Bool {
+        return lhs.identifier == rhs.identifier && lhs.isSelected == rhs.isSelected
+    }
 }
