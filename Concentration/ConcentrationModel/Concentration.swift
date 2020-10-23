@@ -9,8 +9,18 @@
 import Foundation
 
 class Concentration {
-    
-    public var cards = [Card]()
+    private var numberOfCardsToMatch: Int
+    private var cards: CardDeck
+    private var cardsSelected: Int {
+        get {
+            var count = 0
+            for card in cardsDealt {
+                if card.isSelected { count += 1 }
+            }
+            return count
+        }
+    }
+    public var cardsDealt = [Card]()
     public var flipCount = 0
     public var currentEmojiTheme = 0
     public var score = 0 {
@@ -18,84 +28,46 @@ class Concentration {
             if score < 0 { score = 0 }
         }
     }
-    private var indexOfOneAndOnlyFaceUpCard : Int? {
-        get {
-            return cards.indices.filter({ cards[$0].isFaceUp }).oneAndOnly
-        }
-        
-        set(newValue) {
-            for index in cards.indices {
-                cards[index].isFaceUp = (index == newValue)
-            }
-        }
-    }
     
+    // TODO: Finish this properly.
     public func chooseCard(at index: Int) {
-        assert(cards.indices.contains(index), "Concentration.chooseCard(at: \(index)): chosen index not valid.")
-        if !cards[index].isMatched && !cards[index].isFaceUp {
-            flipCount += 1
-            if let matchIndex = indexOfOneAndOnlyFaceUpCard, matchIndex != index {
-                // Check if the cards match
-                if cards[matchIndex].identifier == cards[index].identifier {
-                    cards[matchIndex].isMatched = true
-                    cards[index].isMatched = true
-                    score += 2 // Add score of 2 on match.
-                } else { // If the cards do not match, check if they were seen and change score accordingly.
-                    if cards[index].wasSeen {
-                        score -= 1
-                    }
-                    if cards[matchIndex].wasSeen {
-                        score -= 1
-                    }
-                }
-                
-                // If the cards don't match, mark them as seen.
-                cards[index].wasSeen = true
-                cards[matchIndex].wasSeen = true
-                cards[index].isFaceUp = true
-            } else {
-                // Either 0 or 2 cards are face up, can flip them all down.
-                for index in cards.indices {
-                    cards[index].isFaceUp = false
-                }
-                
-                indexOfOneAndOnlyFaceUpCard = index
+        assert(cardsDealt.indices.contains(index), "Concentration.chooseCard(at: \(index)): chosen index not valid.")
+        
+        var card = cardsDealt[index]
+        if cardsSelected < numberOfCardsToMatch {
+            if !isCardSelected(card) {
+                card.wasSeen = true
+                card.isSelected = true
+                cardsDealt[index] = card
             }
         }
     }
     
-    public init(numberOfPairsOfCards: Int, numberOfEmojiThemes: Int) {
-        assert(numberOfPairsOfCards > 0, "Concentration.init(\(numberOfPairsOfCards)): Must have at least one pair of cards.")
-        for _ in 0..<numberOfPairsOfCards {
-            let card = Card()
-            cards += [card, card]
-        }
-        
-        // Choose a random emoji theme to use for the instance of the game.
-        currentEmojiTheme = Int.random(in: 1...numberOfEmojiThemes)
-        
-        // Shuffle the cards in the card array.
-        cards.shuffle()
+    public init(numberOfCardsToMatch: Int, numberOfEmojiThemes: Int) {
+        assert(numberOfCardsToMatch == 2 || numberOfCardsToMatch == 3, "Concentration.init(\(numberOfCardsToMatch)): Must have at least one pair of cards.")
+        self.numberOfCardsToMatch = numberOfCardsToMatch
+        cards = CardDeck(numberOfCardsToMatch: numberOfCardsToMatch)
+        resetGame(numberOfEmojiThemes: numberOfEmojiThemes)
     }
     
-    public func resetGame(numberOfPairsOfCards: Int, numberOfEmojiThemes: Int) {
+    public func resetGame(numberOfEmojiThemes: Int) {
         // Reset all necessary variables for new game.
         flipCount = 0
         score = 0
-        
-        // Reset the state of all the cards.
-        for index in cards.indices {
-            cards[index].isFaceUp = false
-            cards[index].isMatched = false
-            cards[index].wasSeen = false
+        cardsDealt.removeAll()
+        cards = CardDeck(numberOfCardsToMatch: numberOfCardsToMatch)
+        cards.shuffle()
+        while cardsDealt.count < 20 {
+            cardsDealt.append(cards.dealCard()!)
         }
-        
-        // Reshuffle, and choose a new emoji theme.
         cards.shuffle()
         currentEmojiTheme = Int.random(in: 1...numberOfEmojiThemes)
     }
+    
+    public func isCardSelected(_ card: Card) -> Bool {
+        return card.isSelected
+    }
 }
-
 
 extension Collection {
     var oneAndOnly: Element? {

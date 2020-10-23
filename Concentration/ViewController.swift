@@ -20,12 +20,12 @@ class ViewController: UIViewController {
         selected by the game.
     */
     private var emojiThemes = [
-        1: ["🚗", "🚕", "🚙", "🚒", "🚖", "🚘", "🚚", "🚛"],
-        2: ["🍫", "🍬", "🍭", "🍪", "🍩", "🍰", "🧁", "🥮"],
-        3: ["🐶", "🐱", "🐭", "🐹", "🐰", "🦊", "🐻", "🐼"],
-        4: ["🍏", "🍎", "🍐", "🍊", "🍋", "🍌", "🍉", "🍇"],
-        5: ["⚽️", "🏀", "🏈", "⚾️", "🥎", "🎾", "🏐", "🏉"],
-        6: ["❤️", "🧡", "💛", "💚", "💙", "💜", "🖤", "🤍"],
+        1: ["🚗", "🚕", "🚙", "🚒", "🚖", "🚘", "🚚", "🚛", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"],
+        //2: ["🍫", "🍬", "🍭", "🍪", "🍩", "🍰", "🧁", "🥮"],
+        //3: ["🐶", "🐱", "🐭", "🐹", "🐰", "🦊", "🐻", "🐼"],
+        //4: ["🍏", "🍎", "🍐", "🍊", "🍋", "🍌", "🍉", "🍇"],
+        //5: ["⚽️", "🏀", "🏈", "⚾️", "🥎", "🎾", "🏐", "🏉"],
+        //6: ["❤️", "🧡", "💛", "💚", "💙", "💜", "🖤", "🤍"],
     ]
     
     public override func viewDidLoad() {
@@ -34,7 +34,7 @@ class ViewController: UIViewController {
     }
     
     // Instance of the actual game logic class.
-    private lazy var game = Concentration(numberOfPairsOfCards: (cardButtons.count+1)/2,
+    private lazy var game = Concentration(numberOfCardsToMatch: 2,
                                           numberOfEmojiThemes: emojiThemes.count)
 
     @IBAction private func touchCard(_ sender: UIButton) {
@@ -45,24 +45,23 @@ class ViewController: UIViewController {
     }
     
     @IBAction private func startNewGame(_ sender: UIButton) {
-        game.resetGame(numberOfPairsOfCards: (cardButtons.count+1)/2,
-                       numberOfEmojiThemes: emojiThemes.count)
+        game.resetGame(numberOfEmojiThemes: emojiThemes.count)
         updateViewFromModel()
     }
     
     private func updateViewFromModel() {
         for index in cardButtons.indices {
             let button = cardButtons[index]
-            let card = game.cards[index]
-            if card.isFaceUp {
+            let card = game.cardsDealt[index]
+            if game.isCardSelected(card) {
+                print("Card #: \(card.identifier) / \(card.wasSeen)")
                 button.setTitle(emoji(for: card), for: UIControl.State.normal)
                 button.backgroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
             } else {
                 button.setTitle("", for: UIControl.State.normal)
-                button.backgroundColor = card.isMatched ? #colorLiteral(red: 1, green: 1, blue: 1, alpha: 0) : #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1)
+                button.backgroundColor = #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1)
             }
         }
-        
         updateScoreLabel()
         updateFlipCountLabel()
     }
@@ -93,6 +92,6 @@ class ViewController: UIViewController {
             Since the cards are shuffled AND a random theme is chosen in the game's init()
             method, I don't bother to select emojis randomly here.
         */
-        return emojiThemes[game.currentEmojiTheme]?[card.identifier - 1] ?? "?"
+        return emojiThemes[game.currentEmojiTheme]?[card.identifier] ?? "?"
     }
 }
