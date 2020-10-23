@@ -45,21 +45,29 @@ class ViewController: UIViewController {
     }
     
     @IBAction private func startNewGame(_ sender: UIButton) {
-        game.resetGame(numberOfEmojiThemes: emojiThemes.count)
+        game.resetGame(numberOfCardsToMatch: 2, numberOfEmojiThemes: emojiThemes.count)
+        for button in cardButtons {
+            button.isHidden = false
+        }
         updateViewFromModel()
     }
     
     private func updateViewFromModel() {
         for index in cardButtons.indices {
             let button = cardButtons[index]
-            let card = game.cardsDealt[index]
-            if game.isCardSelected(card) {
-                print("Card #: \(card.identifier) / \(card.wasSeen)")
-                button.setTitle(emoji(for: card), for: UIControl.State.normal)
-                button.backgroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+            if game.cardsDealt.indices.contains(index) {
+                let card = game.cardsDealt[index]
+                if game.isCardSelected(card) {
+                    button.setTitle(emoji(for: card), for: UIControl.State.normal)
+                    button.backgroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+                } else {
+                    button.setTitle("", for: UIControl.State.normal)
+                    button.backgroundColor = #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1)
+                }
             } else {
                 button.setTitle("", for: UIControl.State.normal)
-                button.backgroundColor = #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1)
+                button.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 0)
+                button.isHidden = true
             }
         }
         updateScoreLabel()

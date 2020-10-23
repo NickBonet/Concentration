@@ -11,12 +11,10 @@ import Foundation
 class Concentration {
     private var numberOfCardsToMatch: Int
     private var cards: CardDeck
-    private var cardsSelected: Int {
+    private var cardsSelectedCount: Int {
         get {
             var count = 0
-            for card in cardsDealt {
-                if card.isSelected { count += 1 }
-            }
+            for card in cardsDealt { if card.isSelected { count += 1 } }
             return count
         }
     }
@@ -29,29 +27,54 @@ class Concentration {
         }
     }
     
-    // TODO: Finish this properly.
-    public func chooseCard(at index: Int) {
-        assert(cardsDealt.indices.contains(index), "Concentration.chooseCard(at: \(index)): chosen index not valid.")
-        
-        var card = cardsDealt[index]
-        if cardsSelected < numberOfCardsToMatch {
-            if !isCardSelected(card) {
-                card.wasSeen = true
-                card.isSelected = true
-                cardsDealt[index] = card
-            }
-        }
-    }
-    
     public init(numberOfCardsToMatch: Int, numberOfEmojiThemes: Int) {
         assert(numberOfCardsToMatch == 2 || numberOfCardsToMatch == 3, "Concentration.init(\(numberOfCardsToMatch)): Must have at least one pair of cards.")
         self.numberOfCardsToMatch = numberOfCardsToMatch
         cards = CardDeck(numberOfCardsToMatch: numberOfCardsToMatch)
-        resetGame(numberOfEmojiThemes: numberOfEmojiThemes)
+        resetGame(numberOfCardsToMatch: numberOfCardsToMatch, numberOfEmojiThemes: numberOfEmojiThemes)
     }
     
-    public func resetGame(numberOfEmojiThemes: Int) {
-        // Reset all necessary variables for new game.
+    public func chooseCard(at index: Int) {
+        assert(cardsDealt.indices.contains(index), "Concentration.chooseCard(at: \(index)): chosen index not valid.")
+        let card = cardsDealt[index]
+        // If there's not enough cards for match, allow selection if not selected.
+        if cardsSelectedCount < numberOfCardsToMatch {
+            if !isCardSelected(card) {
+                setCardSelected(index)
+            }
+        }
+        // If there's enough cards for a match, check for the match.
+        else if cardsSelectedCount == numberOfCardsToMatch {
+            var selectedCards = [Card]()
+            for card in cardsDealt {
+                if card.isSelected { selectedCards.append(card) }
+            }
+            // Match found!
+            if selectedCards.allSatisfy({$0 == selectedCards.first}) {
+                score += numberOfCardsToMatch
+                selectedCards.forEach {
+                    // Replaces matched cards at their current index, so that the other cards are not scattered.
+                    if let newCard = cards.dealCard() { cardsDealt[cardsDealt.firstIndex(of: $0)!] = newCard }
+                    else { cardsDealt.remove(at: cardsDealt.firstIndex(of: $0)!) }
+                }
+            }
+            // No match found, deselect cards and penalize score if necessary.
+            else {
+                for card in selectedCards {
+                    let index = cardsDealt.firstIndex(of: card)!
+                    cardsDealt[index].isSelected = false
+                    if card.wasSeen { score -= 1 }
+                }
+            }
+            setCardSelected(index)
+        }
+        print("Cards in deck: \(cards.count())")
+        print("Cards dealt: \(cardsDealt.count)")
+        print("Cards selected: \(cardsSelectedCount)")
+    }
+    
+    // Reset all necessary variables for new game.
+    public func resetGame(numberOfCardsToMatch: Int, numberOfEmojiThemes: Int) {
         flipCount = 0
         score = 0
         cardsDealt.removeAll()
@@ -60,17 +83,20 @@ class Concentration {
         while cardsDealt.count < 20 {
             cardsDealt.append(cards.dealCard()!)
         }
-        cards.shuffle()
         currentEmojiTheme = Int.random(in: 1...numberOfEmojiThemes)
     }
     
+    // Simply checks if the passed card is selected or not.
     public func isCardSelected(_ card: Card) -> Bool {
         return card.isSelected
     }
-}
-
-extension Collection {
-    var oneAndOnly: Element? {
-        return (count == 1) ? self.first : nil
+    
+    // Sets properties for when a card is selected.
+    private func setCardSelected(_ index: Int) {
+        if cardsDealt.indices.contains(index) {
+            cardsDealt[index].wasSeen = true
+            cardsDealt[index].isSelected = true
+            flipCount += 1
+        }
     }
 }

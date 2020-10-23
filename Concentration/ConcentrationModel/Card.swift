@@ -9,7 +9,6 @@
 import Foundation
 
 struct Card : Equatable {
-    
     public var identifier: Int
     public var wasSeen = false
     public var isSelected = false

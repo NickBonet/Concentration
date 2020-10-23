@@ -24,7 +24,9 @@ class CardDeck {
     }
     
     public func dealCard() -> Card? {
-        return cards.removeFirst()
+        if count() > 0 {
+            return cards.removeFirst()
+        } else { return nil }
     }
     
     public func count() -> Int {
