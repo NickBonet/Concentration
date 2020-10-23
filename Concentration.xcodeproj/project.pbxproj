@@ -78,6 +78,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		268BC76925428D0F003504B9 /* ConcentrationModel */ = {
+			isa = PBXGroup;
+			children = (
+				26EB03D82510223D00F5F029 /* Concentration.swift */,
+				26F675DF25017EB7006D27A8 /* Card.swift */,
+			);
+			path = ConcentrationModel;
+			sourceTree = "<group>";
+		};
 		7D0AC8C324FDAC86004A6A2C = {
 			isa = PBXGroup;
 			children = (
@@ -101,8 +110,7 @@
 		7D0AC8CE24FDAC86004A6A2C /* Concentration */ = {
 			isa = PBXGroup;
 			children = (
-				26EB03D82510223D00F5F029 /* Concentration.swift */,
-				26F675DF25017EB7006D27A8 /* Card.swift */,
+				268BC76925428D0F003504B9 /* ConcentrationModel */,
 				7D0AC8D324FDAC86004A6A2C /* ViewController.swift */,
 				7D0AC8FF24FDAE13004A6A2C /* Supporting Files */,
 				7D0AC8D524FDAC86004A6A2C /* Main.storyboard */,

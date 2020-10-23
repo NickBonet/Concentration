@@ -10,18 +10,8 @@ import UIKit
 
 class ViewController: UIViewController {
 
-    @IBOutlet private weak var flipLabel: UILabel! {
-        didSet {
-            updateFlipCountLabel()
-        }
-    }
-    
-    @IBOutlet private weak var scoreLabel: UILabel! {
-        didSet {
-            updateScoreLabel()
-        }
-    }
-    
+    @IBOutlet private weak var flipLabel: UILabel!
+    @IBOutlet private weak var scoreLabel: UILabel!
     @IBOutlet private var cardButtons: [UIButton]!
     
     /*
@@ -37,6 +27,11 @@ class ViewController: UIViewController {
         5: ["⚽️", "🏀", "🏈", "⚾️", "🥎", "🎾", "🏐", "🏉"],
         6: ["❤️", "🧡", "💛", "💚", "💙", "💜", "🖤", "🤍"],
     ]
+    
+    public override func viewDidLoad() {
+        super.viewDidLoad()
+        updateViewFromModel()
+    }
     
     // Instance of the actual game logic class.
     private lazy var game = Concentration(numberOfPairsOfCards: (cardButtons.count+1)/2,

@@ -13,7 +13,11 @@ class Concentration {
     public var cards = [Card]()
     public var flipCount = 0
     public var currentEmojiTheme = 0
-    public var score = 0
+    public var score = 0 {
+        didSet {
+            if score < 0 { score = 0 }
+        }
+    }
     private var indexOfOneAndOnlyFaceUpCard : Int? {
         get {
             return cards.indices.filter({ cards[$0].isFaceUp }).oneAndOnly
@@ -35,13 +39,13 @@ class Concentration {
                 if cards[matchIndex].identifier == cards[index].identifier {
                     cards[matchIndex].isMatched = true
                     cards[index].isMatched = true
-                    changeScore(value: 2) // Add score of 2 on match.
+                    score += 2 // Add score of 2 on match.
                 } else { // If the cards do not match, check if they were seen and change score accordingly.
                     if cards[index].wasSeen {
-                        changeScore(value: -1)
+                        score -= 1
                     }
                     if cards[matchIndex].wasSeen {
-                        changeScore(value: -1)
+                        score -= 1
                     }
                 }
                 
@@ -89,15 +93,6 @@ class Concentration {
         // Reshuffle, and choose a new emoji theme.
         cards.shuffle()
         currentEmojiTheme = Int.random(in: 1...numberOfEmojiThemes)
-    }
-
-    // Simple method to modify game score, without dipping into negative values.
-    private func changeScore(value: Int) {
-        if (value > 0) {
-            score += value
-        } else {
-            if score > 0 { score += value }
-        }
     }
 }
 
