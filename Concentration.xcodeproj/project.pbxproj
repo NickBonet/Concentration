@@ -39,8 +39,8 @@
 		26EB03D82510223D00F5F029 /* Concentration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Concentration.swift; sourceTree = "<group>"; };
 		26F675DF25017EB7006D27A8 /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
 		7D0AC8CC24FDAC86004A6A2C /* Concentration.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Concentration.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		7D0AC8CF24FDAC86004A6A2C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = ../AppDelegate.swift; sourceTree = "<group>"; };
-		7D0AC8D124FDAC86004A6A2C /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SceneDelegate.swift; path = ../SceneDelegate.swift; sourceTree = "<group>"; };
+		7D0AC8CF24FDAC86004A6A2C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		7D0AC8D124FDAC86004A6A2C /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		7D0AC8D324FDAC86004A6A2C /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		7D0AC8D624FDAC86004A6A2C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		7D0AC8D824FDAC88004A6A2C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -74,6 +74,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2651D27B25436C3700BF9D78 /* Base Files */ = {
+			isa = PBXGroup;
+			children = (
+				7D0AC8D824FDAC88004A6A2C /* Assets.xcassets */,
+				7D0AC8CF24FDAC86004A6A2C /* AppDelegate.swift */,
+				7D0AC8D124FDAC86004A6A2C /* SceneDelegate.swift */,
+			);
+			path = "Base Files";
+			sourceTree = "<group>";
+		};
 		268BC76925428D0F003504B9 /* ConcentrationModel */ = {
 			isa = PBXGroup;
 			children = (
@@ -105,23 +115,13 @@
 		7D0AC8CE24FDAC86004A6A2C /* Concentration */ = {
 			isa = PBXGroup;
 			children = (
+				2651D27B25436C3700BF9D78 /* Base Files */,
 				268BC76925428D0F003504B9 /* ConcentrationModel */,
 				7D0AC8D324FDAC86004A6A2C /* ViewController.swift */,
-				7D0AC8FF24FDAE13004A6A2C /* Supporting Files */,
 				7D0AC8D524FDAC86004A6A2C /* Main.storyboard */,
 				7D0AC8DD24FDAC88004A6A2C /* Info.plist */,
 			);
 			path = Concentration;
-			sourceTree = "<group>";
-		};
-		7D0AC8FF24FDAE13004A6A2C /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				7D0AC8D824FDAC88004A6A2C /* Assets.xcassets */,
-				7D0AC8CF24FDAC86004A6A2C /* AppDelegate.swift */,
-				7D0AC8D124FDAC86004A6A2C /* SceneDelegate.swift */,
-			);
-			path = "Supporting Files";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
