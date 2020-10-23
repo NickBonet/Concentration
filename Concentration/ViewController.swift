@@ -13,6 +13,11 @@ class ViewController: UIViewController {
     @IBOutlet private weak var flipLabel: UILabel!
     @IBOutlet private weak var scoreLabel: UILabel!
     @IBOutlet private var cardButtons: [UIButton]!
+    @IBOutlet weak var twoCardButton: UIButton!
+    @IBOutlet weak var threeCardButton: UIButton!
+    
+    // Changes when one of the new game buttons is pressed, then sent to model.
+    private var cardsToMatch = 2
     
     /*
         Nice little dictionary for different emoji themes for the cards.
@@ -30,11 +35,15 @@ class ViewController: UIViewController {
     
     public override func viewDidLoad() {
         super.viewDidLoad()
+        twoCardButton.layer.borderColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+        twoCardButton.layer.borderWidth = 1
+        threeCardButton.layer.borderColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+        threeCardButton.layer.borderWidth = 1
         updateViewFromModel()
     }
     
     // Instance of the actual game logic class.
-    private lazy var game = Concentration(numberOfCardsToMatch: 2,
+    private lazy var game = Concentration(numberOfCardsToMatch: cardsToMatch,
                                           numberOfEmojiThemes: emojiThemes.count)
 
     @IBAction private func touchCard(_ sender: UIButton) {
@@ -45,7 +54,11 @@ class ViewController: UIViewController {
     }
     
     @IBAction private func startNewGame(_ sender: UIButton) {
-        game.resetGame(numberOfCardsToMatch: 2, numberOfEmojiThemes: emojiThemes.count)
+        if sender.tag == 2 { cardsToMatch = 2 }
+        else if sender.tag == 3 {
+            cardsToMatch = 3
+        }
+        game.resetGame(numberOfCardsToMatch: cardsToMatch, numberOfEmojiThemes: emojiThemes.count)
         for button in cardButtons {
             button.isHidden = false
         }

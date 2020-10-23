@@ -9,7 +9,7 @@
 import Foundation
 
 class Concentration {
-    private var numberOfCardsToMatch: Int
+    private var cardsToMatch: Int
     private var cards: CardDeck = CardDeck(numberOfCardsToMatch: 2)
     private var cardsSelectedCount: Int {
         get {
@@ -29,28 +29,28 @@ class Concentration {
     
     public init(numberOfCardsToMatch: Int, numberOfEmojiThemes: Int) {
         assert(numberOfCardsToMatch == 2 || numberOfCardsToMatch == 3, "Concentration.init(\(numberOfCardsToMatch)): Must have at least one pair of cards.")
-        self.numberOfCardsToMatch = numberOfCardsToMatch
-        resetGame(numberOfCardsToMatch: numberOfCardsToMatch, numberOfEmojiThemes: numberOfEmojiThemes)
+        self.cardsToMatch = numberOfCardsToMatch
+        resetGame(numberOfCardsToMatch: self.cardsToMatch, numberOfEmojiThemes: numberOfEmojiThemes)
     }
     
     public func chooseCard(at index: Int) {
         assert(cardsDealt.indices.contains(index), "Concentration.chooseCard(at: \(index)): chosen index not valid.")
         let card = cardsDealt[index]
         // If there's not enough cards for match, allow selection if not selected.
-        if cardsSelectedCount < numberOfCardsToMatch {
+        if cardsSelectedCount < cardsToMatch {
             if !isCardSelected(card) {
                 setCardSelected(index)
             }
         }
         // If there's enough cards for a match, check for the match.
-        else if cardsSelectedCount == numberOfCardsToMatch {
+        else if cardsSelectedCount == cardsToMatch {
             var selectedCards = [Card]()
             for card in cardsDealt {
                 if card.isSelected { selectedCards.append(card) }
             }
             // Match found!
             if selectedCards.allSatisfy({$0 == selectedCards.first}) {
-                score += numberOfCardsToMatch
+                score += cardsToMatch
                 selectedCards.forEach {
                     // Replaces matched cards at their current index, so that the other cards are not scattered.
                     if let newCard = cards.dealCard() { cardsDealt[cardsDealt.firstIndex(of: $0)!] = newCard }
@@ -77,10 +77,11 @@ class Concentration {
     public func resetGame(numberOfCardsToMatch: Int, numberOfEmojiThemes: Int) {
         flipCount = 0
         score = 0
+        self.cardsToMatch = numberOfCardsToMatch
         cardsDealt.removeAll()
-        cards = CardDeck(numberOfCardsToMatch: numberOfCardsToMatch)
+        cards = CardDeck(numberOfCardsToMatch: self.cardsToMatch)
         cards.shuffle()
-        while cardsDealt.count < 20 {
+        while cardsDealt.count < 25 {
             cardsDealt.append(cards.dealCard()!)
         }
         currentEmojiTheme = Int.random(in: 1...numberOfEmojiThemes)
