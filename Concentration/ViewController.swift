@@ -17,6 +17,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var threeCardButton: UIButton!
     
     // Changes when one of the new game buttons is pressed, then sent to model.
+    // Defaults to 2 card match game.
     private var cardsToMatch = 2
     
     /*
@@ -25,21 +26,29 @@ class ViewController: UIViewController {
         selected by the game.
     */
     private var emojiThemes = [
-        1: ["🚗", "🚕", "🚙", "🚒", "🚖", "🚘", "🚚", "🚛", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"],
-        //2: ["🍫", "🍬", "🍭", "🍪", "🍩", "🍰", "🧁", "🥮"],
-        //3: ["🐶", "🐱", "🐭", "🐹", "🐰", "🦊", "🐻", "🐼"],
-        //4: ["🍏", "🍎", "🍐", "🍊", "🍋", "🍌", "🍉", "🍇"],
-        //5: ["⚽️", "🏀", "🏈", "⚾️", "🥎", "🎾", "🏐", "🏉"],
-        //6: ["❤️", "🧡", "💛", "💚", "💙", "💜", "🖤", "🤍"],
+        1: ["🚗", "🚕", "🚙", "🚒", "🚖", "🚘", "🚚", "🚛", "🚍", "🚌", "🚎", "🏎", "🚓", "🚐", "🚜", "🛺", "✈️", "🚤", "🚂", "🚆"],
+        2: ["🍫", "🍬", "🍭", "🍪", "🍩", "🍰", "🧁", "🥮", "🍧", "🍨", "🍦", "🥧", "🎂", "☕️", "🍿", "🥜", "🍯", "🥛", "🥤", "🍡"],
+        3: ["🐶", "🐱", "🐭", "🐹", "🐰", "🦊", "🐻", "🐼", "🐨", "🐯", "🦁", "🐮", "🐷", "🐸", "🐵", "🐔", "🐧", "🐧", "🦆", "🐦"],
+        4: ["🍏", "🍎", "🍐", "🍊", "🍋", "🍌", "🍉", "🍇", "🍓", "🍈", "🍒", "🍑", "🥭", "🍍", "🥥", "🥝", "🍅", "🥑", "🥦", "🥬"],
+        5: ["⚽️", "🏀", "🏈", "⚾️", "🥎", "🎾", "🏐", "🏉", "🥏", "🎱", "🪀", "🏓", "🏸", "🏒", "🏑", "🥍", "⛳️", "🥅", "🪁", "🏹"],
+        6: ["❤️", "🧡", "💛", "💚", "💙", "💜", "🖤", "🤍", "🔴", "🟠", "🟡", "🟢", "🔵", "🟣", "⚫️", "⚪️", "🟤", "🟥", "🟧", "🟨"],
     ]
     
     public override func viewDidLoad() {
         super.viewDidLoad()
+        assert(verifyEmojiThemes(), "Emoji themes do not have enough emojis for card sets!")
         twoCardButton.layer.borderColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
         twoCardButton.layer.borderWidth = 1
         threeCardButton.layer.borderColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
         threeCardButton.layer.borderWidth = 1
         updateViewFromModel()
+    }
+    
+    private func verifyEmojiThemes() -> Bool {
+        for (_, emojis) in emojiThemes {
+            if emojis.count != 20 { return false }
+        }
+        return true
     }
     
     // Instance of the actual game logic class.
